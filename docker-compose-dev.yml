@@ -1,0 +1,169 @@
+version: '3'
+services:
+  pyspark_notebook:
+    build: ./pyspark/.
+    image: pyspark_notebook
+    ports:
+      - 8890:8888
+    volumes:
+      - ./notebooks/:/root/data
+    tty: true
+    privileged: true
+    env_file:
+      - ./hd.env
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+      - SPARK_HOME=/spark
+      - ENABLE_INIT_DAEMON='false'
+    depends_on:
+      - datanode
+      - namenode
+      - spark-worker
+      - spark-master
+    links:
+      - spark-master
+
+    networks:
+      - hadoop
+
+  namenode:
+    image: bde2020/hadoop-namenode:1.1.0-hadoop2.8-java8
+    container_name: namenode
+    volumes:
+      - ./data/namenode:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME= mosaic
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+    env_file:
+      - ./hd.env
+    ports:
+      - 50070:50070
+    networks:
+      - hadoop
+
+  datanode:
+    image: bde2020/hadoop-datanode:1.1.0-hadoop2.8-java8
+    container_name: datanode
+    depends_on:
+      - namenode
+    volumes:
+      - ./data/datanode:/hadoop/dfs/data
+    environment:
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+    env_file:
+      - ./hd.env
+    ports:
+      - 50075:50075
+    networks:
+      - hadoop
+
+  hive-server:
+    image: bde2020/hive:2.1.0-postgresql-metastore
+    container_name: hive-server
+    env_file:
+      - ./hd.env
+    environment:
+      - HIVE_CORE_CONF_javax_jdo_option_ConnectionURL=jdbc:postgresql://hive-metastore/metastore
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+    ports:
+      - "10000:10000"
+    networks:
+      - hadoop
+
+  hive-metastore:
+    image: bde2020/hive:2.1.0-postgresql-metastore
+    container_name: hive-metastore
+    env_file:
+      - ./hd.env
+    environment:
+      - HIVE_CORE_CONF_javax_jdo_option_ConnectionURL=jdbc:postgresql://hive-metastore/metastore
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+    command: /opt/hive/bin/hive --service metastore
+    networks:
+      - hadoop
+  hive-metastore-postgresql:
+    image: bde2020/hive-metastore-postgresql:2.1.0
+    container_name: hive-metastore-postgresql
+    environment:
+      - HIVE_CORE_CONF_javax_jdo_option_ConnectionURL=jdbc:postgresql://hive-metastore/metastore
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+    networks:
+      - hadoop
+  spark-master:
+    build: ./spark-master/.
+    container_name: spark-master
+    ports:
+      - 8080:8080
+      - 7077:7077
+    environment:
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+      - NAMENODE_HOSTNAME=namenode
+      - INIT_DAEMON_STEP= setup_spark
+    depends_on:
+      - namenode
+    env_file:
+      - ./hd.env
+    networks:
+      - hadoop
+
+  spark-worker:
+    build: ./spark-worker/.
+    container_name: spark-worker
+    depends_on:
+      - spark-master
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+      - HIVE_CORE_CONF_javax_jdo_option_ConnectionURL=jdbc:postgresql://hive-metastore/metastore
+      - NAMENODE_HOSTNAME=namenode
+    depends_on:
+      - spark-master
+    ports:
+      - 8081:8081
+    env_file:
+      - ./hd.env
+    networks:
+      - hadoop
+
+  postgres:
+    image: postgres:9.5
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+    ports:
+      - 5432:5432
+
+  redis:
+    image: 'redis:3.2.7'
+    container_name: redis
+
+  airflow:
+     image: puckel/docker-airflow:1.9.0-2
+     restart: always
+     depends_on:
+         - postgres
+     environment:
+         - LOAD_EX=n
+         - EXECUTOR=Local
+         - FERNET_KEY=my-local-fernet-key
+     volumes:
+         - ./dags:/usr/local/airflow/dags
+         # custom plugins
+         # - ./plugins:/usr/local/airflow/plugins
+     ports:
+         - "8081:8080"
+     command: webserver
+
+  superset:
+    image: amancevice/superset
+    depends_on:
+      - redis
+    container_name: devtrac_superset
+    ports:
+      - "8088:8088"
+    
+networks:
+  hadoop:
+    external: true
+

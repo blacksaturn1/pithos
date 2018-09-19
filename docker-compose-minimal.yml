@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+
+  pyspark:
+    image: jupyter/pyspark-notebook
+    ports:
+      - "8080:8888"
+      - "6379:6379"
+    volumes:
+      - .:/home/jovyan/work

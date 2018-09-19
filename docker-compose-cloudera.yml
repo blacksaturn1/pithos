@@ -1,0 +1,61 @@
+
+version: '3'
+services:
+  cdh:
+    build: .
+    image: cdh
+    hostname: cdh
+    environment:
+      SPARK_HOME: /dev/spark
+      SPARK_MASTER: spark://localhost:7077
+    environment:
+      - COMPOSE_HTTP_TIMEOUT=180
+    ports:
+      - "8888:8888"
+      - "10020:10020"
+      - "8022:22"
+      - "7180:7180"
+      - "11000:11000"
+      - "50070:50070"
+      - "50075:50075"
+      - "8088:8088"
+      - "19888:19888" 
+      - "8983:8983"
+      - "8032:8032"
+      - "8042:8042"
+      - "60010:60010"
+      - "4040:4040"
+      - "10002:10002" 
+      - "8889:8889"   
+    volumes:
+      - ./:/var/lib/hadoop-hdfs
+    privileged: true
+    tty: true
+    stdin_open: true
+    command: bash -c "/root/start.sh;"
+
+  redis:
+      image: redis:3.2.7
+      container_name: redis
+
+  postgres:
+      image: postgres:latest
+      environment:
+          - POSTGRES_USER=airflow
+          - POSTGRES_PASSWORD=airflow
+          - POSTGRES_DB=airflow
+  airflow:
+      image: puckel/docker-airflow:1.9.0
+      container_name: airflow
+      restart: always
+      depends_on:
+          - redis
+          - postgres
+          - cdh
+      environment:
+          - LOAD_EX=n
+          - EXECUTOR=Local
+          - INSTALL_HIVE=y
+      ports:
+          - "8080:8080"
+      command: webserver
