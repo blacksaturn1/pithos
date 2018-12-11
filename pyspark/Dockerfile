@@ -22,8 +22,9 @@ RUN apt-get update && apt-get install -y \
   python3-wheel \
   python3-scipy \
   python3-numpy-dev \
-  python3-numpy \
-  locales
+  python3-numpy
+  #  \
+  #locales
 
 # locales
 RUN locale-gen en_US.UTF-8
@@ -39,7 +40,10 @@ RUN pip install sympy numpy scipy
 RUN apt-get update && apt-get install gcc -y && \
     apt-get install make  -y && \
     apt-get install zlib1g-dev -y && \
-    apt-get -y install python-smbus libncursesw5-dev libgdbm-dev libc6-dev zlib1g-dev libsqlite3-dev tk-dev libssl-dev openssl libffi-dev
+    apt-get -y install python-smbus libncursesw5-dev libgdbm-dev libc6-dev
+ 
+RUN apt-get update && \
+    apt-get -y install  zlib1g-dev libsqlite3-dev tk-dev libssl-dev openssl libffi-dev
 
 # Install NodeJS
 RUN apt-get update
@@ -104,10 +108,10 @@ RUN jupyter nbextension enable --sys-prefix export_embedded/main
 RUN jupyter nbextension enable --sys-prefix hide_header/main
 
 # locales
-RUN locale-gen en_US.UTF-8
-RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=en_US.UTF-8
+#RUN locale-gen en_US.UTF-8
+#RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+#    dpkg-reconfigure --frontend=noninteractive locales && \
+#    update-locale LANG=en_US.UTF-8
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
