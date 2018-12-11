@@ -34,16 +34,20 @@ RUN apt-get install pandoc -y
 
 # Install other packages
 RUN pip install --upgrade wheel
-RUN pip install --upgrade oauthenticator hdfs findspark pyspark
+RUN pip install --upgrade oauthenticator hdfs
+
+RUN pip install --upgrade findspark pyspark
+
+
 
 # locales
-RUN locale-gen en_US.UTF-8
-RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=en_US.UTF-8
+#RUN locale-gen en_US.UTF-8
+#RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+#    dpkg-reconfigure --frontend=noninteractive locales && \
+#    update-locale LANG=en_US.UTF-8
 
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
+#ENV LANG en_US.UTF-8
+#ENV LANGUAGE en_US.UTF-8
+#ENV LC_ALL en_US.UTF-8
 
 SHELL ["/bin/bash", "-c"]
