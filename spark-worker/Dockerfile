@@ -20,11 +20,11 @@ RUN apt-get update && apt-get install -y \
  
 
 RUN apt-get update && apt-get install -y \
-  #build-essential \
   python3-wheel \
   python3-scipy \
   python3-numpy-dev \
-  python3-numpy 
+  python3-numpy
+  #build-essential \
   #locales
 
 
