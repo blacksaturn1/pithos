@@ -21,8 +21,8 @@ RUN apt-get update && apt-get install -y \
   python3-wheel \
   python3-scipy \
   python3-numpy-dev \
-  python3-numpy \
-  locales
+  python3-numpy 
+  #locales
 
 RUN ln -s /usr/bin/python3 /usr/local/bin/python
 
