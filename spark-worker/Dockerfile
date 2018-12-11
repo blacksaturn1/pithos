@@ -9,23 +9,26 @@ RUN ln -sf /bin/bash /bin/sh
 # remove all old python versions
 RUN apt-get purge -y python.*
 
-
-# install python3
+# install
 RUN apt-get update && apt-get install -y \
   git \
   python3 \
   python3-pip \
   python3-all-dev \
-  python3-setuptools
- 
-
-RUN apt-get update && apt-get install -y \
+  python3-setuptools \
+  build-essential \
   python3-wheel \
   python3-scipy \
   python3-numpy-dev \
   python3-numpy
-  #build-essential \
+  #  \
   #locales
+
+# locales
+#RUN locale-gen en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
 
 
 RUN ln -s /usr/bin/python3 /usr/local/bin/python
