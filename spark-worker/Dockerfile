@@ -10,6 +10,7 @@ RUN ln -sf /bin/bash /bin/sh
 RUN apt-get purge -y python.*
 
 # install
+
 # remove all old python versions
 RUN apt-get purge -y python.*
 
@@ -26,12 +27,15 @@ RUN ln -s /usr/bin/python3 /usr/local/bin/python
 # Install PIP
 RUN pip install --upgrade pip
 
-# locales
-#RUN locale-gen en_US.UTF-8
-ENV LC_ALL=en_US.UTF-8
-ENV LANG=en_US.UTF-8
-ENV LANGUAGE=en_US.UTF-8
+# Install Jupyter
+RUN pip install jupyter ipywidgets jupyterlab-widgets ipyvolume ipywidgets
 
+# Install JupyterLab
+RUN pip install notebook jupyterhub jupyterlab jupyterthemes
+RUN jupyter lab clean
+RUN jupyter lab build
+
+# locales
 
 RUN ln -s /usr/bin/python3 /usr/local/bin/python
 
