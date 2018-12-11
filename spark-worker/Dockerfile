@@ -1,4 +1,4 @@
-FROM bde2020/spark-worker:2.1.0-hadoop2.8-hive-java8
+FROM bde2020/spark-worker:2.3.2-hadoop3.1.1-java8
 
 RUN echo "alias python=python3" >> ~/.bashrc
 RUN echo "alias pip=python3" >> ~/.bashrc
