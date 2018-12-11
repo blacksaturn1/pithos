@@ -27,6 +27,11 @@ RUN pip install --upgrade pip
 # Install Jupyter
 RUN pip install jupyter ipywidgets jupyterlab-widgets ipyvolume ipywidgets
 
+# Install NodeJS
+RUN apt-get update
+RUN curl -sL https://deb.nodesource.com/setup_9.x | bash -
+RUN apt-get install -y nodejs
+
 # Install JupyterLab
 RUN pip install notebook jupyterhub jupyterlab jupyterthemes
 RUN jupyter lab clean
@@ -51,10 +56,7 @@ RUN apt-get update && apt-get -y install python-smbus libncursesw5-dev libgdbm-d
 RUN apt-get update && \
     apt-get -y install  zlib1g-dev libsqlite3-dev tk-dev libssl-dev openssl libffi-dev
 
-# Install NodeJS
-RUN apt-get update
-RUN curl -sL https://deb.nodesource.com/setup_9.x | bash -
-RUN apt-get install -y nodejs
+
 
 
 
