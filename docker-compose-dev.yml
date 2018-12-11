@@ -151,9 +151,9 @@ services:
          - EXECUTOR=Local
          - FERNET_KEY=my-local-fernet-key
      volumes:
-         - ./dags:/usr/local/airflow/dags
+         - ./airflow/dags:/usr/local/airflow/dags
          # custom plugins
-         # - ./plugins:/usr/local/airflow/plugins
+         - ./airflow/plugins:/usr/local/airflow/plugins
      ports:
          - "8081:8080"
      command: webserver
