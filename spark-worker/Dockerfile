@@ -17,12 +17,16 @@ RUN apt-get update && apt-get install -y \
   python3-pip \
   python3-all-dev \
   python3-setuptools \
-  build-essential \
+ 
+
+RUN apt-get update && apt-get install -y \
+  #build-essential \
   python3-wheel \
   python3-scipy \
   python3-numpy-dev \
   python3-numpy 
   #locales
+
 
 RUN ln -s /usr/bin/python3 /usr/local/bin/python
 
