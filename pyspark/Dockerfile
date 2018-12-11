@@ -11,44 +11,15 @@ RUN ln -sf /bin/bash /bin/sh
 # remove all old python versions
 RUN apt-get purge -y python.*
 
+RUN apt-get update && apt-get install -y apt-utils 
+
 # install
-RUN apt-get update && apt-get install -y \
-  git \
-  python3 \
-  python3-pip \
-  python3-all-dev \
-  python3-setuptools \
-  build-essential \
-  python3-wheel \
-  python3-scipy \
-  python3-numpy-dev \
-  python3-numpy
-  #  \
-  #locales
-
-# locales
-#RUN locale-gen en_US.UTF-8
-ENV LC_ALL=en_US.UTF-8
-ENV LANG=en_US.UTF-8
-ENV LANGUAGE=en_US.UTF-8
-
-RUN ln -s /usr/bin/python3 /usr/local/bin/python
-
+RUN apt-get update && apt-get install -y  python3-dev python3-pip python3-numpy python3-scipy
 RUN pip3 install --upgrade  pip
+RUN pip3 install -U virtualenv  # system-wide install
 RUN pip install sympy numpy scipy
 
-RUN apt-get update && apt-get install gcc -y && \
-    apt-get install make  -y && \
-    apt-get install zlib1g-dev -y && \
-    apt-get -y install python-smbus libncursesw5-dev libgdbm-dev libc6-dev
- 
-RUN apt-get update && \
-    apt-get -y install  zlib1g-dev libsqlite3-dev tk-dev libssl-dev openssl libffi-dev
-
-# Install NodeJS
-RUN apt-get update
-RUN curl -sL https://deb.nodesource.com/setup_9.x | bash -
-RUN apt-get install -y nodejs
+RUN ln -s /usr/bin/python3 /usr/local/bin/python
 
 # Install PIP
 RUN pip install --upgrade pip
@@ -60,6 +31,32 @@ RUN pip install jupyter ipywidgets jupyterlab-widgets ipyvolume ipywidgets
 RUN pip install notebook jupyterhub jupyterlab jupyterthemes
 RUN jupyter lab clean
 RUN jupyter lab build
+
+
+
+# locales
+#RUN locale-gen en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
+
+
+
+RUN apt-get update && apt-get install gcc -y && \
+    apt-get install make  -y && \
+    apt-get install zlib1g-dev -y
+
+RUN apt-get update && apt-get -y install python-smbus libncursesw5-dev libgdbm-dev libc6-dev
+ 
+RUN apt-get update && \
+    apt-get -y install  zlib1g-dev libsqlite3-dev tk-dev libssl-dev openssl libffi-dev
+
+# Install NodeJS
+RUN apt-get update
+RUN curl -sL https://deb.nodesource.com/setup_9.x | bash -
+RUN apt-get install -y nodejs
+
+
 
 
 
