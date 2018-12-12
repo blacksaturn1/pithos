@@ -3,8 +3,7 @@ version: '3'
 
 services:
   deep_notebook:
-    image: jupyter/tensorflow-notebook 
-   
+    image: jupyter/tensorflow-notebook   
     volumes:
       - ./airflow/dags/:/root/data
     tty: true
