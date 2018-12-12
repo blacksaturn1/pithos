@@ -1,0 +1,40 @@
+version: '3'
+services:
+  postgres:
+      image: postgres:latest
+      restart: always
+      environment:
+        POSTGRES_DB: superset
+        POSTGRES_PASSWORD: superset
+        POSTGRES_USER: superset
+      ports:
+        - 5433:5432
+      volumes:
+        #- ./superset/postgres/data:/var/lib/postgresql/data
+        - postgres:/var/lib/postgresql/data
+      networks:
+        - superset_private
+
+  superset:
+    image: amancevice/superset
+    depends_on:
+      - redis
+      - postgres
+    #container_name: devtrac_superset
+    environment:
+      MAPBOX_API_KEY: ${MAPBOX_API_KEY}
+    volumes:
+      - ./superset/postgres/superset_config.py:/etc/superset/superset_config.py
+    ports:
+      - "8088:8088"
+    networks:
+      - superset_private
+
+networks:
+  superset_private:
+    
+volumes:
+  postgres:
+    external: false
+  redis:
+    external: false
