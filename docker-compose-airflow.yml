@@ -13,7 +13,7 @@ services:
       - SPARK_HOME=/spark
       - ENABLE_INIT_DAEMON='false'
     command:  start.sh jupyter lab --LabApp.token=''
-     ports:
+    ports:
       - 8080:8888
 
 
