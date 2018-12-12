@@ -14,7 +14,7 @@ services:
       - SPARK_MASTER=spark://spark-master:7077
       - SPARK_HOME=/spark
       - ENABLE_INIT_DAEMON='false'
-    command:  start.sh jupyter lab --LabApp.token='
+    command:  start.sh jupyter lab --LabApp.token=''
     networks:
       - hadoop
 
