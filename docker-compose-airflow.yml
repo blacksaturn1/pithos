@@ -17,8 +17,9 @@ services:
       - 8080:8888
 
 
-  postgres:
+  postgres_airflow:
     image: postgres:9.5
+    restart: always
     environment:
       - POSTGRES_USER=airflow
       - POSTGRES_PASSWORD=airflow
@@ -26,15 +27,30 @@ services:
     ports:
       - 5432:5432
 
+   postgres_superset:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: superset
+      POSTGRES_PASSWORD: superset
+      POSTGRES_USER: superset
+    volumes:
+      - ./superset/postgres/data:/var/lib/postgresql/data
+
+
+
   redis:
     image: 'redis:3.2.7'
-    container_name: redis
+    container_name: redis_pithos
+    restart: always
+    volumes:
+      - redis:/data
 
   airflow:
      image: puckel/docker-airflow:1.9.0-2
      restart: always
      depends_on:
-         - postgres
+         - postgres_airflow
      environment:
          - LOAD_EX=n
          - EXECUTOR=Local
@@ -51,10 +67,14 @@ services:
     image: amancevice/superset
     depends_on:
       - redis
+      - postgres_superset
     container_name: devtrac_superset
     ports:
       - "8088:8088"
     
 networks:
   hadoop:
+    external: true
+volumes:
+  redis:
     external: true
