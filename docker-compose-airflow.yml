@@ -4,8 +4,7 @@ version: '3'
 services:
   deep_notebook:
     image: jupyter/tensorflow-notebook 
-    ports:
-      - 8890:8888
+   
     volumes:
       - ./airflow/dags/:/root/data
     tty: true
@@ -15,8 +14,9 @@ services:
       - SPARK_HOME=/spark
       - ENABLE_INIT_DAEMON='false'
     command:  start.sh jupyter lab --LabApp.token=''
-    networks:
-      - hadoop
+     ports:
+      - 8080:8888
+
 
   postgres:
     image: postgres:9.5
