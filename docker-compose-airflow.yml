@@ -79,4 +79,4 @@ networks:
     external: true
 volumes:
   redis:
-    external: true
+    external: false
