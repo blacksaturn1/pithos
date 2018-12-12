@@ -69,6 +69,10 @@ services:
       - redis
       - postgres_superset
     container_name: devtrac_superset
+    environment:
+      MAPBOX_API_KEY: ${MAPBOX_API_KEY}
+    volumes:
+      - ./superset/superset_config.py:/etc/superset/superset_config.py
     ports:
       - "8088:8088"
     
