@@ -91,3 +91,5 @@ networks:
 volumes:
   redis:
     external: false
+  postgres:
+    external: false
