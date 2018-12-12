@@ -16,7 +16,7 @@ services:
       - 8080:8888
 
 
-  postgres_airflow:
+  postgres:
     image: postgres:9.5
     restart: always
     environment:
@@ -40,7 +40,7 @@ services:
      image: puckel/docker-airflow:1.9.0-2
      restart: always
      depends_on:
-         - postgres_airflow
+         - postgres
      environment:
          - LOAD_EX=n
          - EXECUTOR=Local
