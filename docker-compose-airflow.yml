@@ -5,14 +5,14 @@ services:
   deep_notebook:
     image: jupyter/tensorflow-notebook   
     volumes:
-      - ./airflow/dags/:./airflow/dags/
+      - ./airflow/dags/:/airflow/dags/
     tty: true
     privileged: true
     environment:
       - SPARK_MASTER=spark://spark-master:7077
       - SPARK_HOME=/spark
       - ENABLE_INIT_DAEMON='false'
-    command:  start.sh jupyter lab --LabApp.token='' -e NB_UID=1000 --NotebookApp.notebook_dir=./airflow/dags/
+    command:  start.sh jupyter lab --LabApp.token='' -e NB_UID=1000 --NotebookApp.notebook_dir=/airflow/dags/
     ports:
       - 8080:8888
 
