@@ -32,7 +32,7 @@ services:
 
 networks:
   superset_private:
-    
+    external: true
 volumes:
   postgres:
     external: false
