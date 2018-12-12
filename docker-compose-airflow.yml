@@ -5,7 +5,7 @@ services:
   deep_notebook:
     image: jupyter/tensorflow-notebook   
     volumes:
-      - ./airflow/dags/:/home/jovyan/work
+      - ./airflow/dags/:./airflow/dags/
     tty: true
     privileged: true
     environment:
