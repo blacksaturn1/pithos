@@ -25,14 +25,19 @@ services:
       - POSTGRES_DB=airflow
     ports:
       - 5432:5432
+    volumes:
+      - ./airflow/postgres/data:/var/lib/postgresql/data
+
 
   postgres:
-    image: postgres
+    image: postgres:9.5
     restart: always
     environment:
       POSTGRES_DB: superset
       POSTGRES_PASSWORD: superset
       POSTGRES_USER: superset
+    ports:
+      - 5433:5432
     volumes:
       - ./superset/postgres/data:/var/lib/postgresql/data
 
