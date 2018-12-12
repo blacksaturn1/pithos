@@ -29,19 +29,6 @@ services:
       - ./airflow/postgres/data:/var/lib/postgresql/data
 
 
-  postgres:
-    image: postgres:9.5
-    restart: always
-    environment:
-      POSTGRES_DB: superset
-      POSTGRES_PASSWORD: superset
-      POSTGRES_USER: superset
-    ports:
-      - 5433:5432
-    volumes:
-      - ./superset/postgres/data:/var/lib/postgresql/data
-
-
   redis:
     image: 'redis:3.2.7'
     container_name: redis_pithos
@@ -66,6 +53,20 @@ services:
          - "8081:8080"
      command: webserver
 
+  postgres:
+    image: postgres:9.5
+    restart: always
+    environment:
+      POSTGRES_DB: superset
+      POSTGRES_PASSWORD: superset
+      POSTGRES_USER: superset
+    ports:
+      - 5433:5432
+    volumes:
+      - ./superset/postgres/data:/var/lib/postgresql/data
+    networks:
+      - superset_private
+
   superset:
     image: amancevice/superset
     depends_on:
@@ -78,9 +79,13 @@ services:
       - ./superset/postgres/superset_config.py:/etc/superset/superset_config.py
     ports:
       - "8088:8088"
+    networks:
+      - superset_private
     
 networks:
   hadoop:
+    external: true
+  superset_private:
     external: true
 volumes:
   redis:
