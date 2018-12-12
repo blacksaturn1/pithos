@@ -26,7 +26,7 @@ services:
     ports:
       - 5432:5432
 
-  postgres_superset:
+  postgres:
     image: postgres
     restart: always
     environment:
@@ -66,7 +66,7 @@ services:
     depends_on:
       - redis
       - postgres_superset
-    container_name: devtrac_superset
+    #container_name: devtrac_superset
     environment:
       MAPBOX_API_KEY: ${MAPBOX_API_KEY}
     volumes:
