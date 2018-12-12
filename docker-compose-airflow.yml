@@ -54,7 +54,7 @@ services:
      command: webserver
 
   postgres:
-    image: postgres:9.5
+    image: postgres:latest
     restart: always
     environment:
       POSTGRES_DB: superset
@@ -63,7 +63,8 @@ services:
     ports:
       - 5433:5432
     volumes:
-      - ./superset/postgres/data:/var/lib/postgresql/data
+      #- ./superset/postgres/data:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
     networks:
       - superset_private
 
