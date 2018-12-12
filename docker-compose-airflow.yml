@@ -65,7 +65,7 @@ services:
     image: amancevice/superset
     depends_on:
       - redis
-      - postgres_superset
+      - postgres
     #container_name: devtrac_superset
     environment:
       MAPBOX_API_KEY: ${MAPBOX_API_KEY}
