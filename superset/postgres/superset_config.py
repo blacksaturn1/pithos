@@ -10,6 +10,6 @@ CACHE_CONFIG = {
     'CACHE_REDIS_DB': 1,
     'CACHE_REDIS_URL': 'redis://redis:6379/1'}
 SQLALCHEMY_DATABASE_URI = \
-    'postgresql+psycopg2://superset:superset@postgres_superset:5432/superset'
+    'postgresql+psycopg2://superset:superset@postgres:5432/superset'
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 SECRET_KEY = 'thisISaSECRET_1234'
